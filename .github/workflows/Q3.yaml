@@ -4,30 +4,34 @@ on:
   push:
     paths:
       - Q3.java
+  workflow_dispatch: # Permet d'exécuter le workflow manuellement
 
 jobs:
-  archive-java:
+  create_and_push:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Create Q3_archive_java.txt
-        run: |
-          echo "Nom: Votre Nom" > Q3_archive_java.txt
-          echo "Prénom: Votre Prénom" >> Q3_archive_java.txt
-          echo "" >> Q3_archive_java.txt
-          echo "Contenu du fichier Q3.java :" >> Q3_archive_java.txt
-          echo "" >> Q3_archive_java.txt
-          cat Q3.java >> Q3_archive_java.txt
+    - name: Create Q3_archive_java.txt
+      run: |
+        echo "Nom: Marouard" > Q3_archive_java.txt
+        echo "Prénom: Louis" >> Q3_archive_java.txt
+        echo "" >> Q3_archive_java.txt
+        echo "Contenu de Q3.java :" >> Q3_archive_java.txt
+        cat Q3.java >> Q3_archive_java.txt
 
-      - name: Commit and push changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Q3_archive_java.txt
-          git commit -m "Add Q3_archive_java.txt" || echo "No changes to commit"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Configure git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+    - name: Commit and push Q3_archive_java.txt
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git pull --rebase origin main  # Récupère les modifications distantes
+        git add Q3_archive_java.txt
+        git commit -m "Add Q3_archive_java.txt with Q3.java content"
+        git push origin main
