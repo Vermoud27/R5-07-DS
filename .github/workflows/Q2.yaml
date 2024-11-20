@@ -1,0 +1,27 @@
+name: Q2 Workflow
+
+on:
+  push:
+    paths:
+      - README.md
+
+jobs:
+  create-q2-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Q2_archive_README.md
+        run: |
+          echo "Nom: [Votre Nom]" > Q2_archive_README.md
+          echo "Prénom: [Votre Prénom]" >> Q2_archive_README.md
+          echo "Date et heure: $(date '+%Y-%m-%d %H:%M:%S')" >> Q2_archive_README.md
+          cat README.md >> Q2_archive_README.md
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          commit_message: "Add Q2_archive_README.md"
