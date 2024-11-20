@@ -1,0 +1,33 @@
+name: Q6 Workflow
+
+on:
+  push:
+    paths:
+      - Q6.java
+
+jobs:
+  archive-java:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Q6_archive_date.txt
+        run: |
+          filename="Q6_archive_$(date '+%d-%m-%Y-%H%M%S').txt"
+          echo "Nom: [Votre Nom]" > $filename
+          echo "Prénom: [Votre Prénom]" >> $filename
+          cat Q6.java >> $filename
+          wc Q6.java >> $filename
+
+      - name: Create Q6_différences.txt
+        run: |
+          prev_file=$(ls -t Q6_archive_*.txt | head -n 2 | tail -n 1)
+          diff $prev_file $filename > Q6_différences.txt || echo "No differences"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          commit_message: "Add Q6_archive and Q6_différences files"
