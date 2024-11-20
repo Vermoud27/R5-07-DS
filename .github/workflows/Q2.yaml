@@ -6,22 +6,30 @@ on:
       - README.md
 
 jobs:
-  create-q2-file:
+  create-archive:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Get current date and time
+        id: date
+        run: echo "current_time=$(date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+
       - name: Create Q2_archive_README.md
         run: |
-          echo "Nom: [Votre Nom]" > Q2_archive_README.md
-          echo "Prénom: [Votre Prénom]" >> Q2_archive_README.md
-          echo "Date et heure: $(date '+%Y-%m-%d %H:%M:%S')" >> Q2_archive_README.md
+          echo "Nom: Votre Nom" > Q2_archive_README.md
+          echo "Prénom: Votre Prénom" >> Q2_archive_README.md
+          echo "Date et heure: ${{ env.current_time }}" >> Q2_archive_README.md
+          echo "" >> Q2_archive_README.md
           cat README.md >> Q2_archive_README.md
 
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          commit_message: "Add Q2_archive_README.md"
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Q2_archive_README.md
+          git commit -m "Add Q2_archive_README.md" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
