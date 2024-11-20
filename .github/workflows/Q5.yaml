@@ -15,8 +15,8 @@ jobs:
       - name: Create Q5_archive_date.txt
         run: |
           filename="Q5_archive_$(date '+%d-%m-%Y').txt"
-          echo "Nom: [Votre Nom]" > $filename
-          echo "Prénom: [Votre Prénom]" >> $filename
+          echo "Nom: Marouard" > $filename
+          echo "Prénom: Louis" >> $filename
           cat Q5.java >> $filename
 
       - name: Push changes
