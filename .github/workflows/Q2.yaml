@@ -18,8 +18,8 @@ jobs:
 
       - name: Create Q2_archive_README.md
         run: |
-          echo "Nom: Votre Nom" > Q2_archive_README.md
-          echo "Prénom: Votre Prénom" >> Q2_archive_README.md
+          echo "Nom: Marouard" > Q2_archive_README.md
+          echo "Prénom: Louis" >> Q2_archive_README.md
           echo "Date et heure: ${{ env.current_time }}" >> Q2_archive_README.md
           echo "" >> Q2_archive_README.md
           cat README.md >> Q2_archive_README.md
