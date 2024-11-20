@@ -1,0 +1,26 @@
+name: Q3 Workflow
+
+on:
+  push:
+    paths:
+      - Q3.java
+
+jobs:
+  archive-java:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Q3_archive_java.txt
+        run: |
+          echo "Nom: [Votre Nom]" > Q3_archive_java.txt
+          echo "Prénom: [Votre Prénom]" >> Q3_archive_java.txt
+          cat Q3.java >> Q3_archive_java.txt
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          commit_message: "Add Q3_archive_java.txt"
