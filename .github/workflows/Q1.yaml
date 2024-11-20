@@ -6,23 +6,22 @@ on:
       - README.md
 
 jobs:
-  copy_and_commit:
+  copy-readme:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Copy README.md to Q1_archive_README.md
-      run: cp README.md Q1_archive_README.md
+      - name: Copy README.md to Q1_archive_README.md
+        run: cp README.md Q1_archive_README.md
 
-    - name: Configure git
-      run: |
-        git config user.name Vermoud27"
-        git config user.email "louis.marouard@hotmail.fr
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Q1_archive_README.md
+          git commit -m "Add Q1_archive_README.md" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Commit and push changes
-      run: |
-        git add Q1_archive_README.md
-        git commit -m "Add Q1_archive_README.md copied from README.md"
-        git push
