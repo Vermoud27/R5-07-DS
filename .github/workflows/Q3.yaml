@@ -14,13 +14,20 @@ jobs:
 
       - name: Create Q3_archive_java.txt
         run: |
-          echo "Nom: [Votre Nom]" > Q3_archive_java.txt
-          echo "Prénom: [Votre Prénom]" >> Q3_archive_java.txt
+          echo "Nom: Votre Nom" > Q3_archive_java.txt
+          echo "Prénom: Votre Prénom" >> Q3_archive_java.txt
+          echo "" >> Q3_archive_java.txt
+          echo "Contenu du fichier Q3.java :" >> Q3_archive_java.txt
+          echo "" >> Q3_archive_java.txt
           cat Q3.java >> Q3_archive_java.txt
 
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          commit_message: "Add Q3_archive_java.txt"
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Q3_archive_java.txt
+          git commit -m "Add Q3_archive_java.txt" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
