@@ -15,9 +15,12 @@ jobs:
       - name: Copy README.md to Q1_archive_README.md
         run: cp README.md Q1_archive_README.md
 
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          commit_message: "Add Q1_archive_README.md"
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Q1_archive_README.md
+          git commit -m "Add Q1_archive_README.md" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
