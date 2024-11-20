@@ -12,16 +12,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Get current date
+        id: date
+        run: echo "current_date=$(date '+%d-%m-%Y')" >> $GITHUB_ENV
+
       - name: Create Q5_archive_date.txt
         run: |
-          filename="Q5_archive_$(date '+%d-%m-%Y').txt"
-          echo "Nom: Marouard" > $filename
-          echo "Prénom: Louis" >> $filename
-          cat Q5.java >> $filename
+          archive_file="Q5_archive_${{ env.current_date }}.txt"
+          echo "Nom: Marouard" > $archive_file
+          echo "Prénom: Louis" >> $archive_file
+          echo "" >> $archive_file
+          echo "Contenu du fichier Q5.java :" >> $archive_file
+          echo "" >> $archive_file
+          cat Q5.java >> $archive_file
 
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          commit_message: "Add Q5_archive_date.txt"
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Q5_archive_*.txt
+          git commit -m "Add Q5 archive with date ${{ env.current_date }}" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
