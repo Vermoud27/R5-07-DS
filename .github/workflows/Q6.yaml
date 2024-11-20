@@ -21,8 +21,8 @@ jobs:
       - name: Create Q6_archive_date.txt
         run: |
           archive_file="Q6_archive_${{ env.current_date }}.txt"
-          echo "Nom: Marouard" > $archive_file
-          echo "Prénom: Louis" >> $archive_file
+          echo "Nom: Votre Nom" > $archive_file
+          echo "Prénom: Votre Prénom" >> $archive_file
           echo "" >> $archive_file
           echo "Contenu du fichier Q6.java :" >> $archive_file
           echo "" >> $archive_file
@@ -34,10 +34,15 @@ jobs:
 
       - name: Compare with previous archive and create Q6_différences.txt
         run: |
-          last_archive=$(ls Q6_archive_*.txt | sort -r | head -n 2 | tail -n 1)
+          # Trouver le dernier fichier d'archive créé
+          last_archive=$(ls Q6_archive_*.txt | sort -r | head -n 1)
+
+          # Vérifier si un fichier précédent existe
           if [ -f "$last_archive" ]; then
+            # Si le fichier existe, comparer avec le fichier actuel
             diff $last_archive Q6_archive_${{ env.current_date }}.txt > Q6_différences.txt
           else
+            # Si aucun fichier précédent n'existe, indiquer qu'il n'y a pas de comparaison possible
             echo "Aucun fichier précédent pour comparer." > Q6_différences.txt
           fi
 
@@ -50,3 +55,5 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      
